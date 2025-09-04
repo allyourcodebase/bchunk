@@ -19,3 +19,4 @@ zig build
 [ci-url]: https://github.com/allyourcodebase/bchunk/blob/main/.github/workflows/ci.yaml
 [lc-shd]: https://img.shields.io/github/license/allyourcodebase/bchunk.svg?style=for-the-badge&labelColor=black
 [lc-url]: https://github.com/allyourcodebase/bchunk/blob/main/LICENSE
+
