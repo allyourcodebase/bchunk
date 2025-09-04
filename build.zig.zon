@@ -5,8 +5,8 @@
     .minimum_zig_version = "0.15.1",
     .dependencies = .{
         .bchunk = .{
-            .url = "https://github.com/hessu/bchunk/archive/refs/tags/release/1.2.2.tar.gz",
-            .hash = "N-V-__8AAEioAACEKJ1Kyxhwk-TXBfaRBszr74whx5omexvh",
+            .url = "https://github.com/hessu/bchunk/archive/2d57a4b2477f1f4098d640a089e97fae4cf5abcf.tar.gz",
+            .hash = "N-V-__8AALOpAABW3IKYd7xgnDgg2RDHwYfiZfPKU4XQxyce",
         },
     },
     .paths = .{

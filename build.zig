@@ -6,19 +6,23 @@ pub fn build(b: *std.Build) void {
 
     const bchunk = b.dependency("bchunk", .{});
 
-    const bchunk_mod = b.createModule(.{
+    const mod = b.createModule(.{
         .target = target,
         .optimize = optimize,
         .link_libc = true,
     });
 
-    bchunk_mod.addCSourceFile(.{
+    mod.addCSourceFile(.{
         .file = bchunk.builder.path("bchunk.c"),
     });
 
+    if (target.result.os.tag == .windows) {
+        mod.linkSystemLibrary("ws2_32", .{});
+    }
+
     const exe = b.addExecutable(.{
         .name = "bchunk",
-        .root_module = bchunk_mod,
+        .root_module = mod,
     });
 
     b.installArtifact(exe);
