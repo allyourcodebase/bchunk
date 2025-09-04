@@ -1,0 +1,16 @@
+.{
+    .name = .bchunk,
+    .version = "1.2.2",
+    .fingerprint = 0xa7da89c18fac697f, // Changing this has security and trust implications.
+    .minimum_zig_version = "0.15.1",
+    .dependencies = .{
+        .bchunk = .{
+            .url = "https://github.com/hessu/bchunk/archive/refs/tags/release/1.2.2.tar.gz",
+            .hash = "N-V-__8AAEioAACEKJ1Kyxhwk-TXBfaRBszr74whx5omexvh",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+    },
+}
