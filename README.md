@@ -5,9 +5,6 @@
 
 ## Zig build for [bchunk](https://github.com/hessu/bchunk).
 
-
-### :arrow_down: Dependencies
-
 ### :rocket: Usage
 
 ```sh
