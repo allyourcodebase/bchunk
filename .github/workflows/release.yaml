@@ -1,0 +1,90 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    strategy:
+      matrix:
+        target:
+          - os: linux
+            arch: x86_64
+            zig_target: x86_64-linux
+          - os: linux
+            arch: aarch64
+            zig_target: aarch64-linux
+          - os: macos
+            arch: x86_64
+            zig_target: x86_64-macos
+          - os: macos
+            arch: aarch64
+            zig_target: aarch64-macos
+          - os: windows
+            arch: x86_64
+            zig_target: x86_64-windows
+          - os: windows
+            arch: aarch64
+            zig_target: aarch64-windows
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Zig
+        uses: mlugg/setup-zig@v2
+
+      - name: Build for ${{ matrix.target.os }}-${{ matrix.target.arch }}
+        run: |
+          zig build -Dtarget=${{ matrix.target.zig_target }} -Doptimize=ReleaseSafe
+          
+          # Create output directory
+          mkdir -p artifacts
+          
+          # Copy binary with appropriate naming
+          if [[ "${{ matrix.target.os }}" == "windows" ]]; then
+            cp zig-out/bin/bchunk.exe artifacts/bchunk-${{ matrix.target.os }}-${{ matrix.target.arch }}.exe
+          else
+            cp zig-out/bin/bchunk artifacts/bchunk-${{ matrix.target.os }}-${{ matrix.target.arch }}
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bchunk-${{ matrix.target.os }}-${{ matrix.target.arch }}
+          path: artifacts/
+
+  create-release:
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: Prepare release assets
+        run: |
+          mkdir -p release-assets
+          find release-artifacts -name "bchunk-*" -type f -exec cp {} release-assets/ \;
+          ls -la release-assets/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-assets/*
+          generate_release_notes: true
+          draft: false
+          prerelease: false
